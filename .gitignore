@@ -6,9 +6,6 @@
 .DS_Store
 .atom/
 .build/
-
-serviceAccountKey.json
-
 .buildlog/
 .history
 .svn/

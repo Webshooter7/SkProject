@@ -1,0 +1,30 @@
+name: Daily Balance Updater
+
+on:
+  schedule:
+    - cron: '30 18 * * *' # every day at 6:30pm UTC, 00:00 IST
+  workflow_dispatch:
+
+jobs:
+  update-balance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install firebase-admin date-fns
+
+      - name: Create serviceAccountKey.json from secret
+        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > serviceAccountKey.json
+
+      - name: Run balance update script
+        run: node updateDailyBalance.js
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: serviceAccountKey.json
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}

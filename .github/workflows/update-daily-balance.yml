@@ -23,8 +23,14 @@ jobs:
       - name: Create serviceAccountKey.json from secret
         run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > serviceAccountKey.json
 
+      - name: Show workspace contents
+        run: |
+          echo "::group::Listing"
+          ls -R ${{ github.workspace }}
+          echo "::endgroup::"
+
       - name: Run balance update script
-        run: node ./updateDailyBalance.js
+        run: node updateDailyBalance.js
         env:
           GOOGLE_APPLICATION_CREDENTIALS: serviceAccountKey.json
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}

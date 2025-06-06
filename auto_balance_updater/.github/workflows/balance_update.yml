@@ -1,0 +1,32 @@
+name: Update Daily Balance in Firestore
+
+on:
+  schedule:
+    - cron: '30 18* * *'  # Runs daily at midnight IST
+  workflow_dispatch:
+
+jobs:
+  update-balance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./auto_balance_updater
+
+      - name: Create service account key
+        run: echo "$FIREBASE_KEY" > ./auto_balance_updater/serviceAccountKey.json
+        env:
+          FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
+
+      - name: Run balance updater
+        run: node index.js
+        working-directory: ./auto_balance_updater

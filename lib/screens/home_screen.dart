@@ -81,8 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!todaySnapshot.exists) {
       // Fetch yesterday's closing balances
       final yesterdayKey = DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(const Duration(days: 1)));
-      final yesterdayDoc =
-      await FirebaseFirestore.instance.collection('daily_balances').doc(yesterdayKey).get();
+      final yesterdayDoc = await FirebaseFirestore.instance.collection('daily_balances').doc(yesterdayKey).get();
       final yData = yesterdayDoc.data() ?? {};
 
       // Build the initial structure for today
@@ -366,7 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        "Gold: ${_opGold.toStringAsFixed(2)} g | Silver: ${_opSilver.toStringAsFixed(2)} g | Cash: ₹${_opCash.toStringAsFixed(2)}",
+                                        "Gold: ${_opGold.toStringAsFixed(3)} g | Silver: ${_opSilver.toStringAsFixed(3)} g | Cash: ₹${_opCash.toStringAsFixed(2)}",
                                         style: TextStyle(
                                             fontSize: 14, color: Colors.grey[800]),
                                         textAlign: TextAlign.end,
@@ -379,7 +378,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        "Gold: ${_clGold.toStringAsFixed(2)} g | Silver: ${_clSilver.toStringAsFixed(2)} g | Cash: ₹${_clCash.toStringAsFixed(2)}",
+                                        "Gold: ${_clGold.toStringAsFixed(3)} g | Silver: ${_clSilver.toStringAsFixed(3)} g | Cash: ₹${_clCash.toStringAsFixed(2)}",
                                         style: TextStyle(
                                             fontSize: 14, color: Colors.grey[800]),
                                         textAlign: TextAlign.end,

@@ -1,7 +1,7 @@
 const admin = require("firebase-admin");
 const { initializeApp, applicationDefault, cert } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
-const serviceAccount = require("./serviceAccountKey.json"); // Downloaded from Firebase Console
+const serviceAccount = require("./serviceAccountKey.json");
 
 admin.initializeApp({
   credential: cert(serviceAccount)
@@ -10,11 +10,16 @@ admin.initializeApp({
 const db = getFirestore();
 
 async function updateBalance() {
+  console.log("🚀 GitHub Action: Balance update started.");
+
   const now = new Date();
   const dateKey = now.toISOString().split("T")[0]; // YYYY-MM-DD
+
   const yesterday = new Date(now);
   yesterday.setDate(now.getDate() - 1);
   const yesterdayKey = yesterday.toISOString().split("T")[0];
+
+  console.log(`🔍 Today: ${dateKey}, Yesterday: ${yesterdayKey}`);
 
   const prevDoc = await db.collection("daily_balances").doc(yesterdayKey).get();
   const openingGold = prevDoc.exists ? prevDoc.data().closingGold || 0 : 0;
@@ -31,7 +36,11 @@ async function updateBalance() {
     closingCash: openingCash
   });
 
+  console.log("📝 Writing the following data to Firestore:");
+  console.log(JSON.stringify(newData, null, 2));
   console.log(`Balance inserted for ${dateKey}`);
 }
 
-updateBalance().catch(console.error);
+updateBalance().catch((error) => {
+  console.error("❌ Failed to update balance:", error);
+});

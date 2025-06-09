@@ -26,7 +26,7 @@ async function updateBalance() {
   const openingSilver = prevDoc.exists ? prevDoc.data().closingSilver || 0 : 0;
   const openingCash = prevDoc.exists ? prevDoc.data().closingCash || 0 : 0;
 
-  await db.collection("daily_balances").doc(dateKey).set({
+  const newData = {
     date: admin.firestore.Timestamp.now(),
     openingGold,
     openingSilver,
@@ -34,7 +34,9 @@ async function updateBalance() {
     closingGold: openingGold,
     closingSilver: openingSilver,
     closingCash: openingCash
-  });
+  };
+
+  await db.collection("daily_balances").doc(dateKey).set(newData);
 
   console.log("📝 Writing the following data to Firestore:");
   console.log(JSON.stringify(newData, null, 2));

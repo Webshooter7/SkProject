@@ -11,8 +11,8 @@ class AdminDashboard extends StatefulWidget {
 
 class _AdminDashboardState extends State<AdminDashboard> {
   int totalTransactions = 0;
-  double totalGold = 0.0;
-  double totalSilver = 0.0;
+  double soldGold = 0.0;
+  double soldSilver = 0.0;
   double totalRevenue = 0.0;
   double totalProfit = 0;
   double goldBought = 0;
@@ -46,12 +46,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
       final weight = (data['weight'] ?? 0).toDouble();
       final type = (data['type'] ?? '').toString().toLowerCase();
 
-      if (item.contains('gold')) {
-        gold += weight;
-      } else if (item.contains('silver')) {
-        silver += weight;
-      }
-
       if (type == 'sell') {
         revenue += amount;
         if (item == 'gold') gold += weight;
@@ -65,8 +59,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
     setState(() {
       totalTransactions = snapshot.docs.length;
-      totalGold = gold;
-      totalSilver = silver;
+      soldGold = gold;
+      soldSilver = silver;
       totalRevenue = revenue;
       totalProfit = revenue - cost;
       totalCost = cost;
@@ -143,8 +137,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     runSpacing: 20,
                     children: [
                       _buildSummaryCard('Total Transactions', '$totalTransactions', Icons.receipt_long, Colors.teal),
-                      _buildSummaryCard('Gold Sold (g)', totalGold.toStringAsFixed(3), Icons.star, Colors.amber.shade700),
-                      _buildSummaryCard('Silver Sold (g)', totalSilver.toStringAsFixed(3), Icons.circle, Colors.grey),
+                      _buildSummaryCard('Gold Sold (g)', soldGold.toStringAsFixed(3), Icons.star, Colors.amber.shade700),
+                      _buildSummaryCard('Silver Sold (g)', soldSilver.toStringAsFixed(3), Icons.circle, Colors.grey),
                       _buildSummaryCard('Gold Bought (g)', goldBought.toStringAsFixed(3), Icons.star_border, Colors.amber.shade400),
                       _buildSummaryCard('Silver Bought (g)', silverBought.toStringAsFixed(3), Icons.circle_outlined, Colors.grey.shade400),
                       _buildSummaryCard('Total Cost', '₹${totalCost.toStringAsFixed(2)}', Icons.money_off, Colors.red),
